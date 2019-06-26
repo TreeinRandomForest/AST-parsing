@@ -21,4 +21,9 @@ class class_name_1(object):
         '''
         self.x = x
         self.y = y
+    def methodlalala():
+        print(2)
     
+if __name__ == '__main__':
+    obj = class_name_1(2, 4)
+    print(obj.x)
