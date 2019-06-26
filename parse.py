@@ -1,4 +1,6 @@
 import ast
+from argparse import ArgumentParser
+
 
 # We'd like to ignore nodes of type: Load, Store, Del
 IGNORE_TYPES = ['Load', 'Store', 'Del']
@@ -183,7 +185,12 @@ def extract_path_contexts_file(tree):
 
 
 if __name__ == '__main__':
-    with open('example.py', 'r') as source:
+    arg_parser = ArgumentParser()
+    arg_parser.add_argument('-fn', '--file_name', dest='file_name', required=True)
+    args = arg_parser.parse_args()
+
+    file_name = args.file_name
+    with open(file_name, 'r') as source:
         tree = ast.parse(source.read())
     # print_tree_value(tree)
     print_tree(tree)
