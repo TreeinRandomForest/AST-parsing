@@ -57,7 +57,7 @@ def _dfs(current_node, nodes_seen, leaf_nodes_index_set, current_node_index=[-1]
             leaf_nodes_index_set.append(current_node_index[0])
 
         # print(current_node_index[0])
-        print('-->' * (level), type(current_node).__name__, current_node_index[0])
+        # print('-->' * (level), type(current_node).__name__, current_node_index[0])
         level += 1
 
         for child in ast.iter_child_nodes(current_node):
@@ -133,7 +133,7 @@ def extract_path(root, node1, node2):
 
 # extract path contexts for single method ast (FunctionDef tree)
 def extract_path_contexts_single(tree_single):
-    nodes_seen, leaf_nodes_index_set = dfs(tree)
+    nodes_seen, leaf_nodes_index_set = dfs(tree_single)
 
     N_leaf = len(leaf_nodes_index_set)
     bag_of_path_context = []
@@ -171,6 +171,7 @@ def split_tree(tree):
                     subtree_list.append(item)
     return subtree_list
 
+
 # extract path contexts from an AST generated from a script
 def extract_path_contexts_file(tree):
     methods = []
@@ -184,7 +185,7 @@ def extract_path_contexts_file(tree):
 if __name__ == '__main__':
     with open('example.py', 'r') as source:
         tree = ast.parse(source.read())
-    print_tree_value(tree)
+    # print_tree_value(tree)
     print_tree(tree)
     methods = extract_path_contexts_file(tree)
 
