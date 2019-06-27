@@ -1,9 +1,31 @@
 import ast
+import re
 from argparse import ArgumentParser
 
 
 # We'd like to ignore nodes of type: Load, Store, Del
 IGNORE_TYPES = ['Load', 'Store', 'Del']
+
+
+def string_hashcode(s):
+    h = 0
+    for c in s:
+        h = (31 * h + ord(c)) & 0xFFFFFFFF
+    return ((h + 0x80000000) & 0xFFFFFFFF) - 0x80000000
+
+
+# strip_docstring
+def strip_docstring(code_string):
+    a = []
+    for y in re.finditer("'''", code_string):
+        a.append(y)
+    output = ''
+    for i in range(int(len(a) / 2 - 1)):
+        # print(code_string[a[2 * i].start():a[2 * i + 1].end()])
+        output = output + code_string[0:a[2 * i].start()] + code_string[a[2 * i + 1].end():a[2 * (i + 1)].start()]
+    output = output + code_string[a[len(a)-1].end():]
+    return output
+
 
 # print all ast fields except None
 def print_tree_value(tree, level = 0):
@@ -152,8 +174,10 @@ def extract_path_contexts_single(tree_single):
             value2 = get_value(node2)
             if path.split('_')[0] == type(node1).__name__:
                 path_context = ','.join([str(value1), path, str(value2)])
+                # path_context = ','.join([str(value1), str(string_hashcode(path)), str(value2)])
             else:
                 path_context = ','.join([str(value2), path, str(value1)])
+                # path_context = ','.join([str(value2), str(string_hashcode(path)), str(value1)])
             bag_of_path_context.append(path_context)
     return bag_of_path_context
 
@@ -186,17 +210,19 @@ def extract_path_contexts_file(tree):
 
 if __name__ == '__main__':
     arg_parser = ArgumentParser()
-    arg_parser.add_argument('-fn', '--file_name', dest='file_name', required=True)
+    arg_parser.add_argument('-fp', '--file_path', dest='file_path', required=False)
+    arg_parser.add_argument('-dirp', '--directory_path', dest = 'directory_path', required = False)
     args = arg_parser.parse_args()
 
-    file_name = args.file_name
-    with open(file_name, 'r') as source:
-        tree = ast.parse(source.read())
+    file_path = args.file_path
+    with open(file_path, 'r') as source:
+        code_string = strip_docstring(source.read())
+        tree = ast.parse(code_string)
     # print_tree_value(tree)
     print_tree(tree)
     methods = extract_path_contexts_file(tree)
 
     print(len(methods))
     for method in methods:
-        print(method[0:5], '\n\n\n')
+        print(method[0:7], '\n\n\n')
 
