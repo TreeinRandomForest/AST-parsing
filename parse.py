@@ -121,7 +121,8 @@ def find_lca(root, node1, node2):
     # print(lca_list)
 
     # If two of the above calls returns non-None, then two nodes are present in separate subtree
-    if len(lca_list) == 2:
+    # if len(lca_list) == 2:
+    if len(lca_list) >= 2:
         return root
     # If above calls return one non-None, then two nodes exit in one subtree
     if len(lca_list) == 1:
@@ -146,7 +147,8 @@ def extract_path(root, node1, node2):
     # print(lca_list)
 
     # If two of the above calls returns non-None, then two nodes are present in separate subtree
-    if len(lca_list) == 2:
+    # if len(lca_list) == 2:
+    if len(lca_list) >= 2:
         first_str = '_'.join(lca_list[0].replace('DOWN', 'UP').split('_')[::-1])
         return first_str + '_UP_' + type(root).__name__ + '_DOWN_' + lca_list[1]
     # If above calls return one non-None, then two nodes exit in one subtree
@@ -168,7 +170,7 @@ def extract_path_contexts_single(tree_single):
         for j in range(i + 1, N_leaf):
             node1 = nodes_seen[leaf_nodes_index_set[i]]
             node2 = nodes_seen[leaf_nodes_index_set[j]]
-            lcp = find_lca(tree, node1, node2)
+            lcp = find_lca(tree_single, node1, node2)
             path = extract_path(lcp, node1, node2)
             value1 = get_value(node1)
             value2 = get_value(node2)
@@ -219,7 +221,7 @@ if __name__ == '__main__':
         code_string = strip_docstring(source.read())
         tree = ast.parse(code_string)
     # print_tree_value(tree)
-    print_tree(tree)
+    # print_tree(tree)
     methods = extract_path_contexts_file(tree)
 
     print(len(methods))
