@@ -17,12 +17,12 @@ def string_hashcode(s):
 # strip_docstring
 def strip_docstring(code_string):
     a = []
-    for y in re.finditer("'''", code_string):
+    for y in re.finditer('"""', code_string):
         a.append(y)
     output = ''
+    output = output + code_string[0:a[0].start()]
     for i in range(int(len(a) / 2 - 1)):
-        # print(code_string[a[2 * i].start():a[2 * i + 1].end()])
-        output = output + code_string[0:a[2 * i].start()] + code_string[a[2 * i + 1].end():a[2 * (i + 1)].start()]
+        output = output + code_string[a[2 * i + 1].end():a[2 * i + 2].start()]
     output = output + code_string[a[len(a)-1].end():]
     return output
 
