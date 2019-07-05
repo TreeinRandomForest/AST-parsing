@@ -79,7 +79,12 @@ def dfs(root):
 def get_value(node):
     for name, value in ast.iter_fields(node):
         if value is not None:
-            return(value)
+            if isinstance(value, list):
+                value_str = [str(i).replace(' ', '') for i in value]
+                return '|'.join(value_str).strip()
+            else:
+                #print(type(value))
+                return str(value).strip().replace(' ', '')
 
 
 # find lowest common ancestor of two given nodes in the tree

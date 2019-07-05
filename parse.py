@@ -12,8 +12,9 @@ class Contexts(object):
     """
     def __init__(self, ml, mw):
         self.path_dictionary = {}
-        self.path_counts = {}
-        self.value_counts = {}
+        self.path_to_counts = {}
+        self.word_to_counts = {}
+        self.target_to_counts = {}
         self.N_methods = 0
         self.methods = []
         self.max_path_length = ml
@@ -22,24 +23,38 @@ class Contexts(object):
     def update_dictionaries(self, path, hashed_path, word1, word2):
         if hashed_path not in self.path_dictionary.keys():
             self.path_dictionary[hashed_path] = path
-            self.path_counts[hashed_path] = 1
+            self.path_to_counts[hashed_path] = 1
         else:
-            self.path_counts[hashed_path] += 1
-        if word1 not in self.value_counts.keys():
-            self.value_counts[word1] = 1
+            self.path_to_counts[hashed_path] += 1
+        if word1 not in self.word_to_counts.keys():
+            self.word_to_counts[word1] = 1
         else:
-            self.value_counts[word1] += 1
-        if word2 not in self.value_counts.keys():
-            self.value_counts[word2] = 1
+            self.word_to_counts[word1] += 1
+        if word2 not in self.word_to_counts.keys():
+            self.word_to_counts[word2] = 1
         else:
-            self.value_counts[word2] += 1
+            self.word_to_counts[word2] += 1
 
     def append_contexts(self, methods_in_file):
         self.N_methods += len(methods_in_file)
         for method in methods_in_file:
+            if len(method) <= 1:
+                print(method)
+                print('fffffffffffffffffffffffffffffffffffffff')
+                continue
             hashed_method = [method[0]]
+            target_name = method[0]
+            if target_name not in self.target_to_counts.keys():
+                self.target_to_counts[target_name] = 1
+            else:
+                self.target_to_counts[target_name] += 1
             for context in method[1:]:
                 context_array = context.split(',')
+                if len(context_array) != 3:
+                    # print(context_array)
+                    # print('HEREHERE!')
+                    # print(target_name)
+                    continue
                 path = context_array[1]
                 word1 = context_array[0]
                 word2 = context_array[2]
@@ -50,6 +65,8 @@ class Contexts(object):
             self.methods.append(hashed_method)
 
     def print(self, N):
+        """Print bag of contexts for first N lines of methods
+        """
         print(self.N_methods)
         n = 0
         for method in Contexts.methods:
@@ -69,11 +86,12 @@ class Contexts(object):
     def save_dictionaries(self, output_file2):
         with open(output_file2, 'wb') as f:
             pickle.dump(self.path_dictionary, f)
-            pickle.dump(self.value_counts, f)
-            pickle.dump(self.path_counts, f)
+            pickle.dump(self.word_to_counts, f)
+            pickle.dump(self.path_to_counts, f)
+            pickle.dump(self.target_to_counts, f)
             pickle.dump(self.N_methods, f)
+            pickle.dump(self.methods, f)
             print('Dictionaries saved!')
-
 
 
 if __name__ == '__main__':
@@ -93,6 +111,7 @@ if __name__ == '__main__':
 
     Contexts = Contexts(max_path_length, max_path_width)
     N_syntax_error = 0
+    N_files = 0
 
     if file_path is not None:
         with open(file_path, 'r') as source:
@@ -104,6 +123,7 @@ if __name__ == '__main__':
                 methods_in_file = extract_path_contexts_file(tree, max_path_width, max_path_length)
                 Contexts.append_contexts(methods_in_file)
                 Contexts.print(10)
+                N_files += 1
             except SyntaxError:
                 N_syntax_error += 1
 
@@ -112,6 +132,7 @@ if __name__ == '__main__':
             for filename in [f for f in filenames if f.endswith(".py")]:
                 file_path = os.path.join(dirpath, filename)
                 print(file_path)
+                N_files += 1
                 with open(file_path, 'r') as source:
                     code_string = strip_docstring(source.read())
                     try:
@@ -127,5 +148,4 @@ if __name__ == '__main__':
     Contexts.write(args.saved_contexts_file_name)
     Contexts.save_dictionaries(args.saved_dictionaries_name)
     print('Total number of scripts with syntax_error', N_syntax_error)
-
-
+    print('Total number of files:', N_files)
