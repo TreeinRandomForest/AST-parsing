@@ -81,10 +81,10 @@ def get_value(node):
         if value is not None:
             if isinstance(value, list):
                 value_str = [str(i).replace(' ', '') for i in value]
-                return '|'.join(value_str).strip()
+                return '|'.join(value_str).strip().replace('\n', '')
             else:
                 #print(type(value))
-                return str(value).strip().replace(' ', '')
+                return str(value).strip().replace(' ', '').replace('\n', '')
 
 
 # find lowest common ancestor of two given nodes in the tree

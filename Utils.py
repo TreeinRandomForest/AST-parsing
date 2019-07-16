@@ -21,3 +21,5 @@ def strip_docstring(code_string):
         output = output + code_string[a[2 * i + 1].end():a[2 * i + 2].start()]
     output = output + code_string[a[len(a)-1].end():]
     return output
+
+## this would be an intermediate featurization step for an architecture-specific model
