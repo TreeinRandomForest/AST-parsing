@@ -70,6 +70,7 @@ def SplitData(seed, train_per, val_per, path_to_saved_dictionaries, path_to_outp
         pickle.dump(word_to_counts_train, file)
         pickle.dump(path_to_counts_train, file)
         pickle.dump(target_to_counts_train, file)
+        pickle.dump(len(train), file)
 
     with open(path_to_output + 'dictionaries_else', 'wb') as file:
         pickle.dump(word_to_counts_validation, file)

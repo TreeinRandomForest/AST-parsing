@@ -62,8 +62,8 @@ if __name__ == '__main__':
     if os.path.exists(args.saved_dictionaries_name):
         os.remove(args.saved_dictionaries_name)
 
-    Contexts.write(args.saved_contexts_file_name)
     Contexts.save_dictionaries(args.saved_dictionaries_name)
+    # Contexts.write(args.saved_contexts_file_name)
 
     print('Total number of scripts with syntax_error', N_syntax_error)
     print('Total number of files:', N_files)

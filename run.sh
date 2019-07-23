@@ -9,10 +9,10 @@ echo 'Start parsing code...'
 #--saved_dictionaries_name 't2.txt'
 
 python3 parse.py \
---directory_path '../source_code_repo' \
+--directory_path '../source_code_repo/numpy-master' \
 --max_path_length 8 --max_path_width 2 \
---saved_contexts_file_name 'data/parsed/contexts_all.txt' \
---saved_dictionaries_name 'data/parsed/dictionaries_all'
+--saved_contexts_file_name 'data2/parsed/contexts.txt' \
+--saved_dictionaries_name 'data2/parsed/dictionaries'
 
 #python3 parse.py \
 #--directory_path '../source_code_repo/test_folder' \
@@ -26,5 +26,5 @@ python3 split.py \
 --seed 10221211 \
 --train_percentage 0.6 \
 --validation_percentage 0.2 \
---path_to_dictionaries 'data/parsed/dictionaries_all' \
---path_to_output 'data/split/'
+--path_to_dictionaries 'data2/parsed/dictionaries' \
+--path_to_output 'data2/split/'
