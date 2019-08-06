@@ -81,10 +81,12 @@ def get_value(node):
         if value is not None:
             if isinstance(value, list):
                 value_str = [str(i).replace(' ', '') for i in value]
-                return '|'.join(value_str).strip().replace('\n', '')
+                res = '|'.join(value_str).strip().replace('\n', '')
             else:
                 #print(type(value))
-                return str(value).strip().replace(' ', '').replace('\n', '')
+                res = str(value).strip().replace(' ', '').replace('\n', '')
+            #print (res.encode('utf-8'))
+            return res
 
 
 # find lowest common ancestor of two given nodes in the tree
@@ -183,7 +185,7 @@ def split_tree(tree):
             className = node.name
             for item in node.body:
                 if isinstance(item, ast.FunctionDef):
-                    item.name = className + '_' + item.name
+                    item.name = className + '||' + item.name
                     subtree_list.append(item)
     return subtree_list
 
