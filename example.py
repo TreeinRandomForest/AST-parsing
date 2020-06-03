@@ -10,17 +10,20 @@ def method_2(n, arg2):
 def method_3(x):
     # comments
     print('hello!')
-    
+
+"""A comment...
+"""
 class class_name_1(object):
-    '''
+    """
     A paragraph of descriptions...
-    '''
+    """
     def __init__(self, x, y):
-        '''
+        """
         A paragraph of decriptions again...
-        '''
+        """
         self.x = x
         self.y = y
+
     def methodlalala():
         print(2)
     

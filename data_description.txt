@@ -1,0 +1,3 @@
+data: parsed from numpy, panda and sklearn (~27,000)
+data1: parsed from numpy (~8000)
+data2: parsed from numpy polynomial subfolder (518 extracted)
